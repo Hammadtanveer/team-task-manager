@@ -80,21 +80,29 @@ def health_check():
 
 # ── Static Files & SPA Support ──────────────────────────────────────────────
 
-frontend_path = os.path.join(os.path.dirname(__file__), "../frontend/dist")
+from pathlib import Path
 
-# Check if frontend/dist exists (it will after 'npm run build' on Railway)
-if os.path.exists(frontend_path):
-    # Mount the static files
-    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+# Get the absolute path to the frontend dist folder
+# main.py is in backend/, so we go up one level then into frontend/dist
+BASE_DIR = Path(__file__).resolve().parent.parent
+frontend_path = BASE_DIR / "frontend" / "dist"
 
-    # Handle client-side routing: redirect 404s to index.html
-    @app.exception_handler(404)
-    async def spa_handler(request: Request, exc):
-        # If it's an API request, return standard 404 JSON
-        if request.url.path.startswith("/api"):
-            return JSONResponse(
-                status_code=404,
-                content={"detail": str(exc.detail) if hasattr(exc, "detail") else "Not Found"}
-            )
-        # Otherwise serve the frontend
-        return FileResponse(os.path.join(frontend_path, "index.html"))
+# Mount the static files
+app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+
+# Handle client-side routing: redirect 404s to index.html
+@app.exception_handler(404)
+async def spa_handler(request: Request, exc):
+    # If it's an API request, return standard 404 JSON
+    if request.url.path.startswith("/api"):
+        return JSONResponse(
+            status_code=404,
+            content={"detail": str(exc.detail) if hasattr(exc, "detail") else "Not Found"}
+        )
+    
+    # Check if index.html exists before serving
+    index_file = frontend_path / "index.html"
+    if index_file.exists():
+        return FileResponse(str(index_file))
+    
+    return JSONResponse(status_code=404, content={"detail": "Frontend build not found"})
