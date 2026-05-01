@@ -7,8 +7,11 @@ FastAPI application entry point.
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
+import os
 
 from app.database import engine, Base
 from app.models import User, Project, Task  # noqa: F401 – ensure models are imported
@@ -38,8 +41,6 @@ app = FastAPI(
 
 # ── CORS ─────────────────────────────────────────────────────────────────────
 
-import os
-
 frontend_url = os.getenv("FRONTEND_URL")
 origins = [
     "http://localhost:5173", 
@@ -58,7 +59,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── Routers ──────────────────────────────────────────────────────────────────
+# ── API Routers ─────────────────────────────────────────────────────────────
 
 app.include_router(auth.router)
 app.include_router(projects.router)
@@ -67,7 +68,7 @@ app.include_router(tasks.router)
 
 # ── Health Check ─────────────────────────────────────────────────────────────
 
-@app.get("/", tags=["Health"])
+@app.get("/api/health", tags=["Health"])
 def health_check():
     """Simple health check endpoint."""
     return {
@@ -75,3 +76,25 @@ def health_check():
         "service": "Team Task Manager API",
         "version": "1.0.0-FIXED",
     }
+
+
+# ── Static Files & SPA Support ──────────────────────────────────────────────
+
+frontend_path = os.path.join(os.path.dirname(__file__), "../frontend/dist")
+
+# Check if frontend/dist exists (it will after 'npm run build' on Railway)
+if os.path.exists(frontend_path):
+    # Mount the static files
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
+
+    # Handle client-side routing: redirect 404s to index.html
+    @app.exception_handler(404)
+    async def spa_handler(request: Request, exc):
+        # If it's an API request, return standard 404 JSON
+        if request.url.path.startswith("/api"):
+            return JSONResponse(
+                status_code=404,
+                content={"detail": str(exc.detail) if hasattr(exc, "detail") else "Not Found"}
+            )
+        # Otherwise serve the frontend
+        return FileResponse(os.path.join(frontend_path, "index.html"))

@@ -63,10 +63,10 @@ export default function TaskCard({ task, onDragStart }) {
             </div>
           )}
         </div>
-        {task.assigned_user && (
+        {task.assignee && (
           <div className="flex items-center gap-1 text-xs text-[#8A8F98]">
             <User className="w-3 h-3" />
-            <span>{task.assigned_user.name}</span>
+            <span>{task.assignee.name}</span>
           </div>
         )}
       </div>

@@ -56,8 +56,11 @@ export default function TasksPage() {
 
   const updateStatusMut = useMutation({
     mutationFn: ({ id, status }) => tasksApi.updateStatus(id, status),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
-    onError: (e) => toast.error(e.response?.data?.detail || "Failed"),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      toast.success(`Task moved to ${data.data.status.replace("_", " ")}`);
+    },
+    onError: (e) => toast.error(e.response?.data?.detail || "Failed to move task"),
   });
 
   const resetForm = () =>
