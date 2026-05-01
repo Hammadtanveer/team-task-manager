@@ -82,27 +82,41 @@ def health_check():
 
 from pathlib import Path
 
-# Get the absolute path to the frontend dist folder
-# main.py is in backend/, so we go up one level then into frontend/dist
-BASE_DIR = Path(__file__).resolve().parent.parent
-frontend_path = BASE_DIR / "frontend" / "dist"
+def find_frontend_path():
+    # Try different possible locations for frontend/dist
+    # 1. Root level (if main.py is in backend/)
+    path1 = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+    # 2. Same level (if main.py was moved to root)
+    path2 = Path(__file__).resolve().parent / "frontend" / "dist"
+    # 3. Inside backend (if copied there)
+    path3 = Path(__file__).resolve().parent / "dist"
 
-# Mount the static files
-app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+    for p in [path1, path2, path3]:
+        if (p / "index.html").exists():
+            return p
+    return None
 
-# Handle client-side routing: redirect 404s to index.html
-@app.exception_handler(404)
-async def spa_handler(request: Request, exc):
-    # If it's an API request, return standard 404 JSON
-    if request.url.path.startswith("/api"):
-        return JSONResponse(
-            status_code=404,
-            content={"detail": str(exc.detail) if hasattr(exc, "detail") else "Not Found"}
-        )
-    
-    # Check if index.html exists before serving
-    index_file = frontend_path / "index.html"
-    if index_file.exists():
-        return FileResponse(str(index_file))
-    
-    return JSONResponse(status_code=404, content={"detail": "Frontend build not found"})
+frontend_path = find_frontend_path()
+
+if frontend_path:
+    # Mount the static files
+    app.mount("/", StaticFiles(directory=str(frontend_path), html=True), name="frontend")
+
+    # Handle client-side routing: redirect 404s to index.html
+    @app.exception_handler(404)
+    async def spa_handler(request: Request, exc):
+        if request.url.path.startswith("/api"):
+            return JSONResponse(
+                status_code=404,
+                content={"detail": str(exc.detail) if hasattr(exc, "detail") else "Not Found"}
+            )
+        
+        index_file = frontend_path / "index.html"
+        if index_file.exists():
+            return FileResponse(str(index_file))
+        return JSONResponse(status_code=404, content={"detail": "Frontend build not found"})
+else:
+    # Fallback if frontend is missing
+    @app.get("/")
+    def root_fallback():
+        return {"message": "API is running, but frontend build was not found. Please run 'npm run build' in the frontend folder."}
