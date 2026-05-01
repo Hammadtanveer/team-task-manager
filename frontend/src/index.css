@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* ── Railway-Inspired Design Tokens ─────────────────────────── */
+@theme {
+  --color-bg-primary: #111111;
+  --color-bg-secondary: #161616;
+  --color-bg-card: #161616;
+  --color-bg-card-hover: #1c1c1c;
+  --color-bg-input: #111111;
+  --color-bg-sidebar: #111111;
+  --color-bg-navbar: #111111;
+
+  --color-accent-purple: #8B5CF6;
+  --color-accent-purple-hover: #7C3AED;
+  --color-accent-blue: #3b82f6;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-emerald: #10b981;
+  --color-accent-amber: #f59e0b;
+  --color-accent-red: #ef4444;
+  --color-accent-pink: #ec4899;
+
+  --color-text-primary: #EAEAEA;
+  --color-text-secondary: #8A8F98;
+  --color-text-muted: #666666;
+
+  --color-border: #2B2B2B;
+  --color-border-subtle: #1F1F1F;
+  --color-border-hover: #444444;
+}
+
+/* ── Global Reset & Base ─────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
+  color: #e2e8f0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+.app-background {
+  background: #080c14;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(30,27,75,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(15,23,42,0.6) 0%, transparent 50%);
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2B2B2B; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #444444; }
+
+/* ── Input Styles ────────────────────────────────────────────── */
+.input-field {
+  background: #111111;
+  border: 1px solid #2B2B2B;
+  border-radius: 6px;
+  color: #EAEAEA;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 1px #8B5CF6;
+}
+
+.input-field::placeholder {
+  color: #666666;
+}
+
+.input-field option {
+  background: #111111;
+  color: #EAEAEA;
+}
+
+/* ── Button Styles ───────────────────────────────────────────── */
+.btn-primary {
+  background: #EAEAEA;
+  color: #111111;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-white {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-white:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #8A8F98;
+  border: 1px solid #2B2B2B;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  border-color: #444444;
+  color: #EAEAEA;
+}
+
+/* ── Card Styles ─────────────────────────────────────────────── */
+.card {
+  background: rgba(17, 19, 24, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.2);
+}
+
+/* ── Badge Styles ────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.badge-todo {
+  background: #1F1F1F;
+  color: #8A8F98;
+  border: 1px solid #2B2B2B;
+}
+
+.badge-in-progress {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-done {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-admin {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.badge-member {
+  background: #1F1F1F;
+  color: #8A8F98;
+  border: 1px solid #2B2B2B;
+}
+
+/* ── Skeleton Loaders ────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #161616 25%, #1F1F1F 50%, #161616 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* ── Kanban Column ───────────────────────────────────────────── */
+.kanban-column {
+  min-height: 400px;
+  background: rgba(17,19,24,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.kanban-column.drag-over {
+  border-color: #7c3aed;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+/* ── Monospace accent ────────────────────────────────────────── */
+.font-mono {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", monospace;
+}
