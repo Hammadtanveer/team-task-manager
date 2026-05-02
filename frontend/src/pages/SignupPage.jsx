@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Zap } from "lucide-react";
+import { Zap, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -14,6 +14,8 @@ export default function SignupPage() {
     confirmPassword: "",
     role: "MEMBER",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -88,7 +90,6 @@ export default function SignupPage() {
               type="text"
               value={form.name}
               onChange={update("name")}
-              placeholder="John Doe"
               className="input-field"
             />
           </div>
@@ -100,33 +101,48 @@ export default function SignupPage() {
               type="email"
               value={form.email}
               onChange={update("email")}
-              placeholder="you@example.com"
               className="input-field"
             />
           </div>
 
           <div>
             <label className="text-[13px] font-medium text-[#8A8F98] mb-1.5 block">Password</label>
-            <input
-              id="signup-password"
-              type="password"
-              value={form.password}
-              onChange={update("password")}
-              placeholder="Min. 6 characters"
-              className="input-field"
-            />
+            <div className="relative">
+              <input
+                id="signup-password"
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={update("password")}
+                className="input-field pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8F98] hover:text-[#EAEAEA] transition-colors"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
           <div>
             <label className="text-[13px] font-medium text-[#8A8F98] mb-1.5 block">Confirm Password</label>
-            <input
-              id="signup-confirm-password"
-              type="password"
-              value={form.confirmPassword}
-              onChange={update("confirmPassword")}
-              placeholder="••••••••"
-              className="input-field"
-            />
+            <div className="relative">
+              <input
+                id="signup-confirm-password"
+                type={showConfirmPassword ? "text" : "password"}
+                value={form.confirmPassword}
+                onChange={update("confirmPassword")}
+                className="input-field pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8F98] hover:text-[#EAEAEA] transition-colors"
+              >
+                {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
           <div>
