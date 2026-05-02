@@ -10,10 +10,11 @@ import os
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./team_task_manager.db")
 
-if not DATABASE_URL:
-    raise ValueError("DATABASE_URL environment variable is not set in .env file")
+# Railway MySQL URL fix - ZAROORI HAI
+if DATABASE_URL.startswith("mysql://"):
+    DATABASE_URL = DATABASE_URL.replace("mysql://", "mysql+pymysql://", 1)
 
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(

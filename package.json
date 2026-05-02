@@ -4,7 +4,7 @@
   "description": "Monorepo deployment for Team Task Manager",
   "scripts": {
     "build": "cd frontend && npm install && npm run build && cd ../backend && pip install -r requirements.txt",
-    "start": "cd backend && python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
+    "start": "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
   },
   "engines": {
     "node": ">=18"
