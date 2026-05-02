@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: 'https://team-task-manager-production-b9e4.up.railway.app/api',
+  baseURL: '/api',
   headers: { "Content-Type": "application/json" },
   timeout: 15000,
 });
