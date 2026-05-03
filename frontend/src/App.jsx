@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -28,8 +28,15 @@ function AnimatedPage({ children }) {
 
 function AppLayout() {
   const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const saved = localStorage.getItem("sidebar-collapsed");
+    return saved ? JSON.parse(saved) : false;
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("sidebar-collapsed", JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
 
   return (
     <div className="min-h-screen app-background">

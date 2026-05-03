@@ -239,6 +239,10 @@ body {
 }
 
 /* ── Responsive Layout ───────────────────────────────────────── */
+:root {
+  --sidebar-width: 240px; /* Default expanded width */
+}
+
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -248,7 +252,7 @@ body {
   flex: 1;
   margin-top: 60px;
   padding: 16px;
-  transition: all 0.3s ease;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
   min-width: 0;
   --sidebar-offset: 0px;
   margin-left: var(--sidebar-offset, var(--sidebar-width));
