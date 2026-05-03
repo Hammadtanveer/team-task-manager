@@ -8,14 +8,15 @@ A full-stack, production-ready SaaS application for managing team projects and t
 - **Role-Based Access Control:** Differentiates between `ADMIN` (can manage everything) and `MEMBER` (can view and manage assigned tasks).
 - **Dynamic Dashboard:** Real-time statistics showing total projects, tasks, overdue items, and task completion charts.
 - **Kanban Board:** Interactive, horizontally scrollable board to track tasks across `TODO`, `IN PROGRESS`, and `DONE` states.
-- **User Authentication:** Secure JWT-based login and signup flow.
+- **Database:** SQLite or MySQL (with automatic driver correction for production).
+- **Authentication:** Secure JWT-based login and signup flow with password visibility toggles.
 - **Responsive Layout:** Adaptive sidebar and navigation that works seamlessly across devices.
 
 ## 🛠 Tech Stack
 
 ### Backend
 - **Framework:** FastAPI (Python)
-- **Database:** SQLite (via SQLAlchemy ORM)
+- **Database:** SQLite (Local) / MySQL (Production via Railway)
 - **Authentication:** JWT (JSON Web Tokens), Passlib (Bcrypt)
 - **Server:** Uvicorn
 
@@ -67,8 +68,20 @@ npm run dev
 ```
 *The application will be available at http://localhost:5173*
 
+## 🚢 Deployment
+
+The project is configured for **Railway** using Nixpacks.
+- **Node.js:** 20.x
+- **Python:** 3.11.x
+- **Database:** Managed MySQL instance.
+
+To deploy, simply push to your connected GitHub repository. The `railway.toml` handles the build and environment setup automatically.
+
 ## 🎨 Recent Updates
-- Complete UI overhaul to a premium SaaS aesthetic.
-- Fixed layout alignments and optimized the responsive sidebar.
-- Added dynamic user assignment endpoints for task creation.
-- Stabilized Kanban board layouts to prevent column squishing on smaller screens.
+- **API Optimization:** Replaced hardcoded URLs in `axios.js` with relative `/api` paths for seamless environment switching.
+- **Security UI:** Added show/hide password toggles to Login and Signup pages.
+- **Clean Interface:** Removed redundant placeholders from form inputs for a more professional, minimal look.
+- **Deployment Ready:** Integrated Docker and Railway configurations for automated full-stack deployment.
+- **Database Fixes:** Implemented automatic `mysql+pymysql` driver resolution for production environments.
+- **UI Overhaul:** Complete redesign to a premium SaaS aesthetic with optimized Kanban boards and responsive sidebar.
+
