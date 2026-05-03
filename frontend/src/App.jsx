@@ -29,19 +29,26 @@ function AnimatedPage({ children }) {
 function AppLayout() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="min-h-screen app-background">
-      <Sidebar collapsed={isCollapsed} setCollapsed={setIsCollapsed} />
-      <Navbar collapsed={isCollapsed} />
+      <Sidebar 
+        collapsed={isCollapsed} 
+        setCollapsed={setIsCollapsed} 
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
+      <Navbar 
+        collapsed={isCollapsed} 
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
       
       <div 
+        className="main-content"
         style={{
-          marginLeft: isCollapsed ? '72px' : '240px',
-          marginTop: '60px',
-          padding: '32px 40px',
-          minHeight: 'calc(100vh - 60px)',
-          transition: 'margin-left 0.3s ease'
+          '--sidebar-width': isCollapsed ? '72px' : '240px',
         }}
       >
         <main>

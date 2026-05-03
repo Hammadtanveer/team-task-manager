@@ -16,7 +16,7 @@ export default function StatsCard({ label, value, icon: Icon, color = "#8B5CF6",
           <Icon className="w-5 h-5 text-[#6b7280]" />
         </div>
       </div>
-      <p className="text-[48px] font-[700] text-[#ffffff] font-mono leading-none mt-[12px]">{value}</p>
+      <p className="text-4xl md:text-[48px] font-[700] text-[#ffffff] font-mono leading-none mt-[12px]">{value}</p>
     </motion.div>
   );
 }

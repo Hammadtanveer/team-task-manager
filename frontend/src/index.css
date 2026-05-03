@@ -237,3 +237,68 @@ body {
 .font-mono {
   font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", monospace;
 }
+
+/* ── Responsive Layout ───────────────────────────────────────── */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-top: 60px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  min-width: 0;
+  --sidebar-offset: 0px;
+  margin-left: var(--sidebar-offset, var(--sidebar-width));
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding: 32px 40px;
+    --sidebar-offset: var(--sidebar-width);
+  }
+}
+
+.navbar-responsive {
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  .navbar-responsive {
+    left: var(--sidebar-width);
+  }
+}
+
+.sidebar-responsive {
+  transform: translateX(-100%);
+}
+
+.sidebar-responsive.mobile-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .sidebar-responsive {
+    transform: translateX(0);
+  }
+}
+
+/* Custom Scrollbar for the whole app */
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #080c14;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #1e2029;
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #2b2e3b;
+}
